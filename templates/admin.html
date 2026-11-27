@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Admin · CPT Canteen{% endblock %}
+{% block content %}
+<div class="kpis" id="kpis"></div>
+
+<div class="grid-2 admin-grid">
+  <section class="panel">
+    <h3>Verify pickup</h3>
+    <p class="muted">Scan the student's QR pass or type the order ID. Only orders marked ready can be handed over.</p>
+    <form id="verify-form" class="verify">
+      <input id="verify-token" placeholder="CPT-1004-9F3A21BC or ORD-1004" autocomplete="off" required>
+      <button class="btn btn-primary" type="submit">Verify and hand over</button>
+    </form>
+    <div id="verify-result" class="verify-result" aria-live="polite"></div>
+  </section>
+  <section class="panel">
+    <h3>Afternoon slots &amp; schedule</h3>
+    <form id="settings-form" class="inline-ctrl" style="flex-wrap:wrap;margin-bottom:10px">
+      <label style="margin:0">Start <input id="set-start" type="time" value="12:00" style="width:110px;padding:4px 6px"></label>
+      <label style="margin:0">End <input id="set-end" type="time" value="14:30" style="width:110px;padding:4px 6px"></label>
+      <label class="checkbox" style="margin:0"><input id="set-cutoff" type="checkbox" checked> Enforce cutoff</label>
+      <button class="btn btn-quiet btn-sm" type="submit">Save hours</button>
+      <button class="btn btn-primary btn-sm" id="gen-slots-btn" type="button">Generate 0/15 slots</button>
+    </form>
+    <form id="add-slot-form" class="inline-ctrl" style="flex-wrap:wrap;margin-bottom:12px">
+      <input id="new-slot-date" type="date" required style="padding:4px 6px" aria-label="Slot date">
+      <input id="new-slot-start" type="time" value="12:00" required style="padding:4px 6px" aria-label="Slot start">
+      <input id="new-slot-end" type="time" value="12:15" required style="padding:4px 6px" aria-label="Slot end">
+      <input id="new-slot-max" type="number" min="1" max="200" value="15" required style="width:68px;padding:4px 6px" aria-label="Max orders">
+      <button class="btn btn-primary btn-sm" type="submit">Add slot</button>
+    </form>
+    <div id="slot-load"></div>
+  </section>
+</div>
+
+<section class="panel">
+  <h3>Users &amp; campus wallet</h3>
+  <p class="muted">View all accounts, add kitchen staff, add money to a user's campus wallet, or block/unblock access.</p>
+  <form id="add-kitchen-form" class="inline-ctrl" style="flex-wrap:wrap;margin-bottom:12px">
+    <input id="new-kitchen-name" placeholder="Kitchen staff name" required style="padding:5px 8px">
+    <input id="new-kitchen-login" placeholder="Username (e.g. kitchen4)" required style="padding:5px 8px">
+    <input id="new-kitchen-pw" type="password" minlength="4" placeholder="Password (min 4 chars)" required style="padding:5px 8px">
+    <button class="btn btn-primary btn-sm" type="submit">Add kitchen staff</button>
+  </form>
+  <div class="table-wrap"><table class="table" id="users-table"></table></div>
+</section>
+
+<section class="panel">
+  <h3>Manage menu</h3>
+  <form id="add-dish-form" class="menu-add-form">
+    <input id="new-dish-name" placeholder="Dish name" required>
+    <input id="new-dish-cat" placeholder="Category (e.g. Meals, Tiffin)" required>
+    <input id="new-dish-price" type="number" min="1" max="10000" placeholder="Price ₹" required>
+    <input id="new-dish-prep" type="number" min="1" max="120" value="5" placeholder="Prep mins" required>
+    <input id="new-dish-stock" type="number" min="0" max="500" value="20" placeholder="Stock" required>
+    <select id="new-dish-veg" aria-label="Veg or non-veg">
+      <option value="1">Veg</option>
+      <option value="0">Non-veg</option>
+    </select>
+    <input id="new-dish-desc" placeholder="Short description">
+    <button class="btn btn-primary btn-sm" type="submit">Add dish</button>
+  </form>
+  <div class="table-wrap"><table class="table" id="menu-table"></table></div>
+</section>
+
+<section class="panel">
+  <h3>Recent orders</h3>
+  <div class="table-wrap"><table class="table" id="recent-table"></table></div>
+</section>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/admin.js') }}"></script>{% endblock %}

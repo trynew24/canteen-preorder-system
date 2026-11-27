@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Admin · CPT Canteen{% endblock %}
+{% block content %}
+<div class="kpis" id="kpis"></div>
+
+<div class="grid-2 admin-grid">
+  <section class="panel">
+    <h3>Verify pickup</h3>
+    <p class="muted">Scan the student's QR pass or type the order ID. Only orders marked ready can be handed over.</p>
+    <form id="verify-form" class="verify">
+      <input id="verify-token" placeholder="CPT-1004-9F3A21BC or ORD-1004" autocomplete="off" required>
+      <button class="btn btn-primary" type="submit">Verify and hand over</button>
+    </form>
+    <div id="verify-result" class="verify-result" aria-live="polite"></div>
+  </section>
+  <section class="panel">
+    <h3>Slot load</h3>
+    <div id="slot-load"></div>
+  </section>
+</div>
+
+<section class="panel">
+  <h3>Menu stock and availability</h3>
+  <div class="table-wrap"><table class="table" id="menu-table"></table></div>
+</section>
+
+<section class="panel">
+  <h3>Recent orders</h3>
+  <div class="table-wrap"><table class="table" id="recent-table"></table></div>
+</section>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/admin.js') }}"></script>{% endblock %}

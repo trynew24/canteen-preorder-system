@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Sign in · CPT Canteen{% endblock %}
+{% block content %}
+<section class="login">
+  <div class="login-card">
+    <h2>Sign in</h2>
+    <p class="muted">Students use their register number. Staff use their username.</p>
+    {% for m in get_flashed_messages() %}<p class="alert">{{ m }}</p>{% endfor %}
+    <form method="post" action="/login" autocomplete="on">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <label>Register number or username
+        <input name="login_id" required autofocus autocomplete="username"></label>
+      <label>Password
+        <input name="password" type="password" required autocomplete="current-password"></label>
+      <button class="btn btn-primary btn-block" type="submit">Sign in</button>
+    </form>
+  </div>
+
+  {% if demo %}
+  <div class="login-card demo">
+    <h3>Demo quick login</h3>
+    <p class="muted">Test accounts for the project demo. Turn these off with <code>DEMO_MODE=0</code>.</p>
+    {% set demos = [
+      ('Amarnath R', '501125002', 'student123', 'Student'),
+      ('Gopi Krishna', '501125018', 'student123', 'Student'),
+      ('Thiripura Sundari', '501126511', 'student123', 'Student'),
+      ('Arun Karthick', '501125000', 'student123', 'Student'),
+      ('Canteen Kitchen', 'kitchen', 'kitchen123', 'Kitchen'),
+      ('Canteen Admin', 'admin', 'admin123', 'Admin')] %}
+    <div class="demo-list">
+    {% for name, lid, pw, role in demos %}
+      <form method="post" action="/login">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="hidden" name="login_id" value="{{ lid }}">
+        <input type="hidden" name="password" value="{{ pw }}">
+        <button class="demo-btn" type="submit"><span>{{ name }}</span><small>{{ role }}</small></button>
+      </form>
+    {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+</section>
+{% endblock %}

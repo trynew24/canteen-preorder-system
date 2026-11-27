@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Sign in · CPT Canteen{% endblock %}
+{% block content %}
+<section class="login single">
+  <div class="login-card">
+    <div class="notice-banner">
+      <strong>Afternoon Lunch Pre-Orders Only:</strong> Pickup slots are available strictly between <strong>{{ schedule.start_label }} – {{ schedule.end_label }}</strong> ({{ schedule.slot_minutes }}-minute windows).
+    </div>
+    <h2>Sign in</h2>
+    <p class="muted">Students use their register number. Staff use their username.</p>
+    {% for cat, m in get_flashed_messages(with_categories=true) %}
+    <p class="alert {{ 'ok' if cat == 'ok' else '' }}">{{ m }}</p>
+    {% endfor %}
+    <form method="post" action="/login" autocomplete="on">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <label>Register number or username
+        <input name="login_id" required autofocus autocomplete="username"></label>
+      <label>Password
+        <input name="password" type="password" required autocomplete="current-password"></label>
+      <label class="checkbox"><input type="checkbox" name="remember" value="1"> Remember me</label>
+      <button class="btn btn-primary btn-block" type="submit">Sign in</button>
+    </form>
+    <p class="muted auth-switch">New student? <a href="/register">Create an account</a></p>
+  </div>
+</section>
+{% endblock %}

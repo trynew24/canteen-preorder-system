@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Create account · CPT Canteen{% endblock %}
+{% block content %}
+<section class="login single">
+  <div class="login-card">
+    <h2>Create student account</h2>
+    <p class="muted">New accounts start with a ₹0 campus wallet. Ask the canteen admin to add balance.</p>
+    {% for cat, m in get_flashed_messages(with_categories=true) %}
+      <p class="alert {{ 'ok' if cat == 'ok' else '' }}">{{ m }}</p>
+    {% endfor %}
+    <form method="post" action="/register" autocomplete="on">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <label>Full name
+        <input name="name" required autofocus autocomplete="name" placeholder="e.g. Amarnath R"></label>
+      <label>Register number
+        <input name="login_id" required autocomplete="username" placeholder="e.g. 501125002"></label>
+      <label>Campus email (optional)
+        <input name="campus_email" type="email" autocomplete="email" placeholder="e.g. name@cpt.edu"></label>
+      <label>Password
+        <input name="password" type="password" required minlength="4" autocomplete="new-password"></label>
+      <button class="btn btn-primary btn-block" type="submit">Create account</button>
+    </form>
+    <p class="muted auth-switch">Already have an account? <a href="/login">Sign in</a></p>
+  </div>
+</section>
+{% endblock %}

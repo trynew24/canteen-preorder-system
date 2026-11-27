@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Kitchen display · CPT Canteen{% endblock %}
+{% block content %}
+<div class="section-head"><h2>Kitchen display</h2><span class="muted" id="kds-updated"></span></div>
+<div id="kds-slots" class="kds-slots"></div>
+<section class="orders-section">
+  <div class="section-head"><h2>Ready for handover</h2></div>
+  <div id="kds-ready" class="order-list"></div>
+</section>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/kitchen.js') }}"></script>{% endblock %}

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Order food · CPT Canteen{% endblock %}
+{% block content %}
+<div class="notice-banner" id="afternoon-banner">
+  <strong>Afternoon Pickup Only ({{ schedule.start_label }} – {{ schedule.end_label }}):</strong> Pre-orders are available exclusively for today's 15-minute afternoon lunch slots.
+</div>
+<div class="grid-2">
+  <section>
+    <div class="section-head"><h2>Menu</h2><span class="muted" id="menu-count"></span></div>
+    <div class="filters">
+      <input type="search" id="f-q" placeholder="Search dishes" aria-label="Search dishes">
+      <select id="f-veg" aria-label="Veg or non-veg">
+        <option value="all">Veg and non-veg</option><option value="veg">Veg only</option><option value="nonveg">Non-veg only</option>
+      </select>
+      <select id="f-cat" aria-label="Category"><option value="all">All categories</option></select>
+    </div>
+    <div class="menu-grid" id="menu-grid"></div>
+  </section>
+
+  <aside class="side">
+    <div class="panel">
+      <h3>Your order</h3>
+      <div id="cart-lines" class="cart-lines"></div>
+      <div class="row total"><span>Total</span><strong id="cart-total">₹0</strong></div>
+    </div>
+    <div class="panel">
+      <h3>Afternoon pickup slot</h3>
+      <div class="slot-grid" id="slot-grid"></div>
+      <p class="empty hidden" id="no-slots-msg" style="margin-top:8px">No active afternoon pickup slots remain for today ({{ schedule.start_label }} – {{ schedule.end_label }}).</p>
+    </div>
+    <div class="panel">
+      <h3>Payment</h3>
+      <label class="radio"><input type="radio" name="pay" value="UPI" checked> UPI Instant</label>
+      <label class="radio"><input type="radio" name="pay" value="Wallet"> Campus wallet <span class="muted" id="wallet-line"></span></label>
+      <p class="notice-banner hidden" id="wallet-zero-msg" style="margin:8px 0">Your campus wallet balance is ₹0. Please request the Admin to top up your campus wallet.</p>
+      <p class="muted" style="margin:0 0 8px">Only admin can add balance to your campus wallet.</p>
+      <button class="btn btn-primary btn-block" id="pay-btn" type="button" disabled>Pay and book slot</button>
+    </div>
+  </aside>
+</div>
+
+<section class="orders-section">
+  <div class="section-head"><h2>Your orders</h2></div>
+  <div id="my-orders" class="order-list"></div>
+</section>
+
+<div class="modal-backdrop hidden" id="qr-modal" role="dialog" aria-modal="true" aria-labelledby="qr-title">
+  <div class="modal">
+    <div class="modal-head"><h3 id="qr-title">Pickup pass</h3><button class="modal-close" data-close aria-label="Close">&times;</button></div>
+    <div class="modal-body" id="qr-body"></div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/student.js') }}"></script>{% endblock %}

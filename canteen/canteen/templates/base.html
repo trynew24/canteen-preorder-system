@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <title>{% block title %}CPT Canteen{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="/">
+        <span class="brand-mark">CPT</span>
+        <span class="brand-text"><strong>Canteen Pre-Order</strong><small>15-minute pickup slots, no queue</small></span>
+      </a>
+      {% if g.user %}
+      <nav class="nav" aria-label="Portals">
+        {% if g.user.role == 'student' %}<a href="/student" class="{{ 'on' if active == 'student' }}">Order food</a>{% endif %}
+        {% if g.user.role in ('kitchen', 'admin') %}<a href="/kitchen" class="{{ 'on' if active == 'kitchen' }}">Kitchen display</a>{% endif %}
+        {% if g.user.role == 'admin' %}<a href="/admin" class="{{ 'on' if active == 'admin' }}">Admin &amp; scanner</a>{% endif %}
+      </nav>
+      <div class="who">
+        <span class="who-name">{{ g.user.name }} <em>{{ g.user.role }}</em></span>
+        {% if g.user.role == 'student' %}<span class="chip" id="wallet-chip">₹{{ g.user.wallet_balance }}</span>{% endif %}
+        <form method="post" action="/logout">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button class="btn btn-quiet btn-sm" type="submit">Sign out</button>
+        </form>
+      </div>
+      {% endif %}
+    </div>
+  </header>
+  <main class="container">{% block content %}{% endblock %}</main>
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+  <script src="{{ url_for('static', filename='js/common.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>
