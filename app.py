@@ -365,7 +365,7 @@ def register():
         " VALUES (?,?,?,?,?,?,0,0,?)",
         (user_id, name, "student", login_id, generate_password_hash(password), campus_email, db.now_iso()),
     )
-    flash("account created successfully try signing in with the new account", "ok")
+    flash("ACCOUNT CREATED SUCCESSFULLY. TRY SIGNING IN WITH THE NEW ACCOUNT.", "ok")
     return redirect(url_for("login"))
 
 
@@ -380,6 +380,12 @@ def logout():
 def student_page():
     sched = schedule_json(get_settings(db.get_db()))
     return render_template("student.html", active="student", schedule=sched)
+
+
+@app.get("/history")
+@login_required("student")
+def history_page():
+    return render_template("history.html", active="history")
 
 
 @app.get("/kitchen")
@@ -755,6 +761,20 @@ def api_admin_summary():
         slots=[slot_json(s, settings) for s in slots], menu=[menu_json(m) for m in menu],
         users=[user_json(u) for u in users],
         recent=fetch_orders()[:12])
+
+
+@app.post("/api/admin/orders/clear")
+@login_required("admin")
+def api_admin_clear_orders():
+    con = db.get_db()
+    con.execute("BEGIN IMMEDIATE")
+    try:
+        cur = con.execute("DELETE FROM orders WHERE status IN ('picked_up', 'cancelled')")
+        con.execute("COMMIT")
+    except Exception:
+        con.execute("ROLLBACK")
+        raise
+    return jsonify(deleted=cur.rowcount)
 
 
 @app.post("/api/admin/users/<user_id>/wallet")

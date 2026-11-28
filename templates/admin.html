@@ -64,7 +64,10 @@
 </section>
 
 <section class="panel">
-  <h3>Recent orders</h3>
+  <div class="section-head" style="margin-top:0">
+    <h3 style="margin:0">Recent orders</h3>
+    <button class="btn btn-danger btn-sm" id="clear-orders-btn" type="button">Clear completed history</button>
+  </div>
   <div class="table-wrap"><table class="table" id="recent-table"></table></div>
 </section>
 {% endblock %}

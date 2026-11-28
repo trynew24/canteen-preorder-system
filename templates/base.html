@@ -16,7 +16,10 @@
       </a>
       {% if g.user %}
       <nav class="nav" aria-label="Portals">
-        {% if g.user.role == 'student' %}<a href="/student" class="{{ 'on' if active == 'student' }}">Order food</a>{% endif %}
+        {% if g.user.role == 'student' %}
+          <a href="/student" class="{{ 'on' if active == 'student' }}">Order food</a>
+          <a href="/history" class="{{ 'on' if active == 'history' }}">Order history</a>
+        {% endif %}
         {% if g.user.role in ('kitchen', 'admin') %}<a href="/kitchen" class="{{ 'on' if active == 'kitchen' }}">Kitchen display</a>{% endif %}
         {% if g.user.role == 'admin' %}<a href="/admin" class="{{ 'on' if active == 'admin' }}">Admin &amp; scanner</a>{% endif %}
       </nav>

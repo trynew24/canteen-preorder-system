@@ -75,9 +75,11 @@ function renderMenu(menu) {
 }
 
 function renderRecent(rows) {
-  $a("recent-table").innerHTML = "<thead><tr><th>Order</th><th>Student</th><th>Slot</th><th>Total</th><th>Paid by</th><th>Status</th></tr></thead><tbody>" +
-    rows.map((o) => `<tr><td><b>${esc(o.order_id)}</b></td><td>${esc(o.student_name)}</td><td>${esc(o.slot)}</td>
-      <td>₹${o.total_amount}</td><td>${esc(o.payment_method)}</td><td>${statusBadge(o.status)}</td></tr>`).join("") + "</tbody>";
+  $a("recent-table").innerHTML = "<thead><tr><th>Order</th><th>Student</th><th>Date</th><th>Slot</th><th>Total</th><th>Paid by</th><th>Status</th></tr></thead><tbody>" +
+    (rows.length
+      ? rows.map((o) => `<tr><td><b>${esc(o.order_id)}</b></td><td>${esc(o.student_name)}</td><td>${esc((o.created_at || o.slot_date || "").slice(0, 10))}</td><td>${esc(o.slot)}</td>
+          <td>₹${o.total_amount}</td><td>${esc(o.payment_method)}</td><td>${statusBadge(o.status)}</td></tr>`).join("")
+      : '<tr><td colspan="7" class="muted">No recent orders.</td></tr>') + "</tbody>";
 }
 
 async function refresh() {
@@ -136,6 +138,15 @@ on("gen-slots-btn", "click", async () => {
   try {
     const d = await api("/api/admin/slots/generate", {});
     toast(d.created ? `Added ${d.created} new 0/15 slot(s).` : "All 15-min slots already exist.");
+    refresh();
+  } catch (err) { toast(err.message, true); }
+});
+
+on("clear-orders-btn", "click", async () => {
+  if (!window.confirm("Clear all picked-up and cancelled orders from history?")) return;
+  try {
+    const d = await api("/api/admin/orders/clear", {});
+    toast(d.deleted ? `Cleared ${d.deleted} order(s) from history.` : "No completed orders to clear.");
     refresh();
   } catch (err) { toast(err.message, true); }
 });
